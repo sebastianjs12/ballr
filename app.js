@@ -1,28 +1,31 @@
-//TODO - Add a config file and hide all connection details
-//TODO - FIX ORLANDO MAGIC AND DETROIT PISTONS SELECT
-//TODO - ADD PACE OF PLAY
+
 //Dependencies
 const mysql = require('mysql');
 const express = require('express');
 const nba = require('nba-api-client');
-const nbaPlayers = require('nba');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
 const app = express();
 const path = require('path');
+const creds = require('./config/creds');
 
-
+//Hiding DB Credentials in config file that will only appear locally, not in production environment
 const con = mysql.createConnection({
-    host: "host",
-    user: "user",
-    password: "pw",
-    database: "database"
+    host: '128.172.188.107',
+    user: creds.mySQLUser,
+    password: creds.mySQLPass,
+    database: 'V00784979'
 }); 
 
+
+//Using Handlebars for templating and displaying server response
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+//Using Bodyparser to pass info in to functions
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//Routes
 app.get('/', function (req, res) {
     res.render('index');
 });
@@ -30,20 +33,65 @@ app.get('/teamVS', function (req, res){
     res.render('teamVS');
 })
 
-
-
 //Set a static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+//If in production, use production port, else use localhost:5000
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-`select concat(first_name, ' ', last_name) as Player, points as PPG from nba_players order by points desc limit 5`
 
-//Multiple queries disallowed for sql injection protection
+//Multiple queries disallowed for sql injection protection, algorithm for finding out who won
+//If user tries to manually change what value is passed in, it's checked anyway.
+let validIds = [
+    1610612749,
+    1610612761,
+    1610612755,
+    1610612738,
+    1610612754,
+    1610612751,
+    1610612753,
+    1610612765,
+    1610612766,
+    1610612748,
+    1610612764,
+    1610612737,
+    1610612741,
+    1610612739,
+    1610612752,
+    1610612744,
+    1610612743,
+    1610612757,
+    1610612745,
+    1610612762,
+    1610612760,
+    1610612759,
+    1610612746,
+    1610612758,
+    1610612747,
+    1610612750,
+    1610612763,
+    1610612740,
+    1610612742,
+    1610612756
+]
 
+
+
+
+;
 app.post('/getVS', async (req, res) =>{
-    const team1Select = req.body.Team1Select;
-    const team2Select = req.body.Team2Select;
+    let team1Select = req.body.Team1Select;
+    var valid = validIds.includes(team1Select);
+    if(valid == false){
+        team1Select = 1610612749;
+    }
+    team1Select = req.body.Team1Select;
+    let team2Select = req.body.Team2Select;
+    var valid2 = validIds.includes(team2Select);
+    if(valid2 == false){
+        team2Select = 1610612756;
+    }
+    team2Select = req.body.Team2Select;
     let team1Pts;
     let team2Pts;
     let team1Ast;
@@ -66,10 +114,12 @@ app.post('/getVS', async (req, res) =>{
     console.log(team1Select);
     console.log(team2Select);
 
+
     let team1PlayersSql = `select concat(first_name, ' ', last_name) as Player, points, assists, rebounds, turnovers from nba_players where team_id = ${team1Select} order by points desc limit 5`;
     let team2PlayersSql = `select concat(first_name, ' ', last_name) as Player, points, assists, rebounds, turnovers from nba_players where team_id = ${team2Select} order by points desc limit 5`;
     
     try{
+        
         con.query(team1PlayersSql, function (err, result){
             if (err) throw err;
             console.log('success');
@@ -163,8 +213,10 @@ app.post('/getVS', async (req, res) =>{
             console.log('success');
             console.log(result[0].team_name + ' wins');
             let theWinner = result[0].team_name;
-            res.render('teamVS',{winner: theWinner});
-        })
+            res.send(`<html><body><h1>The ${theWinner} win.
+            <a href="/teamVS">Go Back</a></body>
+            </html>`);
+         })
 
 
     }
@@ -174,7 +226,17 @@ app.post('/getVS', async (req, res) =>{
 
 
 app.post('/getData', async (req, res) => {
-    const team1Select = req.body.Team1Select;
+    let team1Select = req.body.Team1Select;
+    console.log(team1Select);
+    let filterSelect = req.body.NumTeamDisplay;
+    if(filterSelect != 2){
+        filterSelect = 1;
+    }
+    var valid = validIds.includes(team1Select);
+    if(valid == false){
+        team1Select = 1610612749;
+    }
+    team1Select = req.body.Team1Select;
     let teamData = [];
     let playerIds = [];
     let teamArray = [];
@@ -416,6 +478,12 @@ app.post('/getData', async (req, res) => {
         // let winPercent = teamNumStats.OverallTeamDashboard.W_PCT;
         // let homeRecord = teamNumStats.LocationTeamDashboard[0].W + " - " + teamNumStats.LocationTeamDashboard[0].L;
         // let awayRecord = teamNumStats.LocationTeamDashboard[1].W + " - " + teamNumStats.LocationTeamDashboard[1].L;
+
+        //All SQL Strings
+
+        if(team1Select.length < 5){
+            team1Select = 1610612741;
+        }
         let teamObj = {};
         let updatePlayerTable = `update nba_players set first_name = ? where first_name = null;`;
         let selectPlayerSql =  `select * from nba_players where team_id = ${team1Select}`;
@@ -441,6 +509,11 @@ app.post('/getData', async (req, res) => {
                 awayRecord:result[0].away_record
             }
         })
+        let allTeamArr = [];
+        let allTeam = `select team_name as Team, concat(wins, ' - ', losses) as Record, win_percent, home_record, away_record from nba_teams order by wins desc`;
+        let top5Team = `select team_name as Team, concat(wins, ' - ', losses) as Record, win_percent, home_record, away_record from nba_teams order by wins desc limit 5`;
+        let top5TeamObj ={};
+        let top5TeamArr = [];
         let top5AstObj = {};
         let top5AstArr = [];
         let top5Ast = `select concat(first_name, ' ', last_name) as Player, assists as APG from nba_players order by assists desc limit 5`;
@@ -450,6 +523,30 @@ app.post('/getData', async (req, res) => {
         let top5obj = {};
         let top5pointsArr = [];
         let top5points = `select concat(first_name, ' ', last_name) as Player, points as PPG from nba_players order by points desc limit 5`;
+        con.query(top5Team, function (err, result){
+            if (err) throw err;
+            for(var x = 0; x<result.length; x++){
+                top5TeamArr.push(result[x]);
+            }
+            top5TeamObj ={
+                rank1pts:result[0],
+                rank2pts:result[1],
+                rank3pts:result[2],
+                rank4pts:result[3],
+                rank5pts:result[4]
+            } 
+                 
+        }) 
+
+        if(filterSelect == 2){
+            con.query(allTeam, function (err, result){
+                if(err) throw err;
+                for(var x = 0; x<result.length; x++){
+                    allTeamArr.push(result[x]);
+                }
+            })
+        }
+
         con.query(top5points, function (err, result){
             if (err) throw err;
             for(var x = 0; x<result.length; x++){
@@ -463,6 +560,7 @@ app.post('/getData', async (req, res) => {
                 rank5pts:result[4]
             }            
         }) 
+
         con.query(top5Ast, function (err, result){
             if (err) throw err;
             for(var x = 0; x<result.length; x++){
@@ -497,7 +595,12 @@ app.post('/getData', async (req, res) => {
                 playerData.push(result[x]);
             }
 
-            res.render('index', {playerInfo: playerData, teamInfo: teamObj, top5pts: top5obj, top5reb: top5RebObj, top5Ast: top5AstObj});
+            if(filterSelect == 2){
+            res.render('index', {playerInfo: playerData, teamInfo: teamObj, top5pts: top5obj, top5reb: top5RebObj, top5Ast: top5AstObj, top5Team: allTeamArr});
+            }
+            else if(filterSelect == 1 || filterSelect == 0){
+            res.render('index', {playerInfo: playerData, teamInfo: teamObj, top5pts: top5obj, top5reb: top5RebObj, top5Ast: top5AstObj, top5Team: top5TeamObj});
+            }
         })
 
   
@@ -507,6 +610,3 @@ app.post('/getData', async (req, res) => {
         console.log(err);
     }
 })
-
-// Team DB Order 1. team_id 2. team_name 3. team_abbreviation 4. wins 5. losses 6. win_percent 7. home_record 8. away_record
-// Player DB Order 1. player_id 2. first_name 3. last_name 4. team_id 5. Points 6. Assists 7. Rebounds 8. PIE

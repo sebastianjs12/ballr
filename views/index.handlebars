@@ -17,7 +17,7 @@
 <body>
     <div class="container-fluid position-relative overflow-hidden text-center bg-light">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
-            <h1 class="display-1 font-weight-normal ballrText">Ballr</h1>
+            <h1 class="display-1 font-weight-normal ballrText">BallrDB</h1>
             <p class="lead font-weight-normal">NBA Database</p>
             <a class="btn btn-outline-secondary" href="/teamVS">Predict Matches</a>
         </div>
@@ -105,6 +105,49 @@
 
 <div class="container text-center">
     <h1>Leaderboards</h1>
+</div>
+<div class="container">
+<select name="NumTeamDisplay" id="filterSelect">
+    <option value="1">Top 5</option>
+    <option value="2">All</option>
+</select>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Team</th>
+      <th scope="col">Record</th>
+      <th scope="col">Win%</th>
+      <th scope="col">Home Record</th>
+      <th scope="col">Away Record</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#each top5Team}}
+    <tr>
+      <th scope="row">{{Team}}</th>
+      <td>{{Record}}</td>
+      <td>{{win_percent}}</td>
+      <td>{{home_record}}</td>
+      <td>{{away_record}}</td>
+    </tr>
+    {{/each}}
+
+  </tbody>
+</table>
+
+</div>
+
+
+<ul>
+{{#each top5team}}
+<li>{{Team}}</li>
+{{/each}}
+</ul>
+
+<div class="container">
+    <table class="table table-sm table-hover">
+
+    </table>
 </div>
 <div class="container">
     <div class="row">
