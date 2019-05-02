@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Ballr CSS -->
+    <link rel="stylesheet" href="css/ballr.css">
+    <title>Ballr | NBA</title>
+</head>
+
+<body>
+    <div class="container-fluid position-relative overflow-hidden text-center bg-light">
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+            <h1 class="display-1 font-weight-normal ballrText">Ballr</h1>
+            <p class="lead font-weight-normal">NBA Database</p>
+            <a class="btn btn-outline-secondary" href="/">View Database</a>
+        </div>
+        <div class="product-device box-shadow d-none d-md-block"></div>
+        <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+            <form action="/getVS" method="POST">
+                <div id="team1" class="container team1Box ">
+                    <div class="row">
+                        <div id="team1Logo" class="col-sm-3 team1Logo">
+                            <!--<img id="team1Logo" src="https://www.nba.com/assets/logos/teams/primary/web/NBA.svg">-->
+                        </div>
+                        <div class="col-sm-6 my-auto text-center">
+                            <div id="team1Name">Select Team</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-9">
+                                <select name="Team1Select" onchange="changeBgColor()" id="selectTeam">
+                                    <option value="0">Select Team:</option>
+                                    <option value="1610612749">Milwaukee Bucks</option>
+                                    <option value="1610612761">Toronto Raptors</option>
+                                    <option value="1610612755">Philadelphia 76ers</option>
+                                    <option value="1610612738">Boston Celtics</option>
+                                    <option value="1610612754">Indiana Pacers</option>
+                                    <option value="1610612751">Brooklyn Nets</option>
+                                    <option value="1610612753">Orlando Magic</option>
+                                    <option value="1610612765">Detroit Pistons</option>
+                                    <option value="1610612766">Charlotte Hornets</option>
+                                    <option value="1610612748">Miami Heat</option>
+                                    <option value="1610612764">Washington Wizards</option>
+                                    <option value="1610612737">Atlanta Hawks</option>
+                                    <option value="1610612741">Chicago Bulls</option>
+                                    <option value="1610612739">Cleveland Cavaliers</option>
+                                    <option value="1610612752">New York Knicks</option>
+                                    <option value="1610612744">Golden State Warriors</option>
+                                    <option value="1610612743">Denver Nuggets</option>
+                                    <option value="1610612757">Portland Trail Blazers</option>
+                                    <option value="1610612745">Houston Rockets</option>
+                                    <option value="1610612762">Utah Jazz</option>
+                                    <option value="1610612760">Oklahoma City Thunder</option>
+                                    <option value="1610612759">San Antonio Spurs</option>
+                                    <option value="1610612746">LA Clippers</option>
+                                    <option value="1610612758">Sacramento Kings</option>
+                                    <option value="1610612747">Los Angeles Lakers</option>
+                                    <option value="1610612750">Minnesota Timberwolves</option>
+                                    <option value="1610612763">Memphis Grizzlies</option>
+                                    <option value="1610612740">New Orleans Pelicans</option>
+                                    <option value="1610612742">Dallas Mavericks</option>
+                                    <option value="1610612756">Phoenix Suns</option>
+                                </select>
+                        </div>
+                  
+
+                    </div>
+                </div>
+           
+                <div id="team2" class="container team2Box ">
+                    <div class="row">
+                        <div id="team2Logo" class="col-sm-3 team2Logo">
+                            <!--<img id="team1Logo" src="https://www.nba.com/assets/logos/teams/primary/web/NBA.svg">-->
+                        </div>
+                        <div class="col-sm-6 my-auto text-center">
+                            <div id="team2Name">Select Team</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-9">
+                                <select name="Team2Select" onchange="changeBgColor2()" id="selectTeam2">
+                                    <option value="0">Select Team:</option>
+                                    <option value="1610612749">Milwaukee Bucks</option>
+                                    <option value="1610612761">Toronto Raptors</option>
+                                    <option value="1610612755">Philadelphia 76ers</option>
+                                    <option value="1610612738">Boston Celtics</option>
+                                    <option value="1610612754">Indiana Pacers</option>
+                                    <option value="1610612751">Brooklyn Nets</option>
+                                    <option value="1610612753">Orlando Magic</option>
+                                    <option value="1610612765">Detroit Pistons</option>
+                                    <option value="1610612766">Charlotte Hornets</option>
+                                    <option value="1610612748">Miami Heat</option>
+                                    <option value="1610612764">Washington Wizards</option>
+                                    <option value="1610612737">Atlanta Hawks</option>
+                                    <option value="1610612741">Chicago Bulls</option>
+                                    <option value="1610612739">Cleveland Cavaliers</option>
+                                    <option value="1610612752">New York Knicks</option>
+                                    <option value="1610612744">Golden State Warriors</option>
+                                    <option value="1610612743">Denver Nuggets</option>
+                                    <option value="1610612757">Portland Trail Blazers</option>
+                                    <option value="1610612745">Houston Rockets</option>
+                                    <option value="1610612762">Utah Jazz</option>
+                                    <option value="1610612760">Oklahoma City Thunder</option>
+                                    <option value="1610612759">San Antonio Spurs</option>
+                                    <option value="1610612746">LA Clippers</option>
+                                    <option value="1610612758">Sacramento Kings</option>
+                                    <option value="1610612747">Los Angeles Lakers</option>
+                                    <option value="1610612750">Minnesota Timberwolves</option>
+                                    <option value="1610612763">Memphis Grizzlies</option>
+                                    <option value="1610612740">New Orleans Pelicans</option>
+                                    <option value="1610612742">Dallas Mavericks</option>
+                                    <option value="1610612756">Phoenix Suns</option>
+                                </select>
+                        </div>
+                        <div class="col-sm-3">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="container text-center">
+         <br/>
+            <button type="submit" class="btn btn-danger">Predict Outcome</button>
+            </form>
+        </div>
+
+{{#each winner}}
+<h1>{{this}}</h1>
+{{/each}}
+  
+    <script src="js/ballr.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>
+   

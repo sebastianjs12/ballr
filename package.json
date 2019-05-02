@@ -1,0 +1,21 @@
+{
+  "name": "ballr",
+  "version": "1.0.0",
+  "description": "NBA Stats & Predictions App",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "mysql": "^2.17.1",
+    "nba": "^4.6.0",
+    "nba-api-client": "^1.0.6",
+    "node-request-queue": "^1.0.2"
+  }
+}
