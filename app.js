@@ -1,7 +1,6 @@
 //Dependencies
 const mysql = require('mysql');
 const express = require('express');
-const nba = require('nba-api-client');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const app = express();
@@ -10,10 +9,10 @@ const creds = require('./config/creds');
 
 //Hiding DB Credentials in config file that will only appear locally, not in production environment
 const con = mysql.createConnection({
-    host: '128.172.188.107',
+    host: 'remotemysql.com',
     user: creds.mySQLUser,
     password: creds.mySQLPass,
-    database: 'V00784979'
+    database: 'YooUVf8BSA'
 });
 
 
